@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPu
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 from webm import *
+from testingWebm import use_regex
 
 app = QApplication([])
 window = QMainWindow()
-#2c2c2c
-#FFD700
+
 app.setStyleSheet("""
     QMainWindow {
         background-color:#003366 ;  /* Couleur de fond de la fenêtre principale */
@@ -31,15 +31,9 @@ app.setStyleSheet("""
 """)
 
 
-
-
-
-
-
-
 def on_button1_click():
 
-    text, ok = QInputDialog.getText(window, "Your audio:", "Paste an URL (stored at C:\\audios\\) ")
+    text, ok = QInputDialog.getText(window, "Your audio:", "Paste an URL ")
     
     if ok and text:  # Si l'utilisateur a validé avec OK et entré quelque chose
         #label.setText(f"URL is: {text}")
@@ -48,8 +42,10 @@ def on_button1_click():
         label.setText("")
         return 
     
-
-    download_youtube_audio(my_yt_url)
+    if use_regex(my_yt_url) == True:
+        download_youtube_audio(my_yt_url)
+    elif use_regex(my_yt_url) == False:
+        on_button1_click()
 
 
 
@@ -78,7 +74,7 @@ layout.addWidget(button)
 button.clicked.connect(on_button1_click)  # Quand button1 est cliqué
 
 global label
-label = QLabel("Info: Your audios are stored in the following directory:  C:\\audios\\  ")
+label = QLabel()
 label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrer le texte dans le label
 layout.addWidget(label)
 
